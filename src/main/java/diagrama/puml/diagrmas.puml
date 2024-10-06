@@ -1,0 +1,130 @@
+@startuml
+entity "Programa" {
++INTEGER id
++TEXT nombre
+}
+
+entity "SplashScreen" {
++INTEGER id
++TEXT estado
++INTEGER programa_id
+}
+
+entity "CSVLoader" {
++INTEGER id
++TEXT archivo
++INTEGER programa_id
++void cargarDatos()
+}
+
+entity "Menu" {
++INTEGER id
++TEXT opciones
++INTEGER programa_id
+}
+
+entity "Graph" {
++INTEGER id
++TEXT tipo_grafico
++INTEGER menu_id
++void aplicarFiltro(TipoFiltro)
+}
+
+entity "Data" {
++INTEGER id
++TEXT contenido
++INTEGER graph_id
+}
+
+entity "ExecutorServiceManager" {
++INTEGER id
++TEXT estado
++INTEGER programa_id
++void ejecutarConcurrencia()
+}
+
+entity "DataProcessor" {
++INTEGER id
++TEXT estado
++INTEGER executor_service_manager_id
+}
+
+entity "SyncManager" {
++INTEGER id
++TEXT estado
++INTEGER data_processor_id
+}
+
+entity "CountDownLatch" {
++INTEGER id
++INTEGER cuenta
++INTEGER sync_manager_id
+}
+
+entity "CyclicBarrier" {
++INTEGER id
++INTEGER cuenta
++INTEGER sync_manager_id
+}
+
+entity "DatabaseService" {
++INTEGER id
++TEXT estado
++INTEGER programa_id
++void insertarDatosConcurrentes(datos)
+}
+
+entity "Usuario" {
++INTEGER id
++TEXT nombre
++TEXT contrasena
+}
+
+entity "Autenticacion" {
++void autenticar()
+}
+
+entity "CreacionUsuario" {
++void crearUsuario()
+}
+
+entity "Dataset" {
++INTEGER rank
++TEXT country
++INTEGER IQ
++FLOAT education_expenditure
++FLOAT avg_income
++FLOAT avg_temp
+}
+
+Programa ||--o{ SplashScreen : "pertenece a"
+Programa ||--o{ CSVLoader : "pertenece a"
+Programa ||--o{ Menu : "pertenece a"
+Programa ||--o{ ExecutorServiceManager : "gestiona"
+Programa ||--o{ DatabaseService : "gestiona"
+
+Menu ||--o{ Graph : "genera"
+
+Graph ||--o{ Data : "contiene"
+
+ExecutorServiceManager ||--o{ DataProcessor : "procesa"
+DataProcessor ||--o{ SyncManager : "sincroniza"
+SyncManager ||--o{ CountDownLatch : "usa"
+SyncManager ||--o{ CyclicBarrier : "usa"
+
+CSVLoader ||--o{ Dataset : "carga"
+
+CSVLoader --|> CountDownLatch : "libera latch cuando finaliza"
+SplashScreen --|> CountDownLatch : "espera a latch"
+SplashScreen --> Menu : "ocultar splash cuando CSV termina"
+DatabaseService --|> ExecutorServiceManager : "ejecuta inserción concurrente"
+CSVLoader --|> ExecutorServiceManager : "ejecuta en paralelo"
+
+Usuario --|> Autenticacion : "delegar autenticación"
+Usuario --|> CreacionUsuario : "delegar creación de usuario"
+Autenticacion --|> Menu : "mostrar menu tras autenticación"
+CreacionUsuario --|> ExecutorServiceManager : "ejecuta creación en paralelo"
+Autenticacion --> ExecutorServiceManager : "ejecuta autenticación en paralelo"
+Usuario --> DatabaseService : "gestiona base de datos de usuarios"
+
+@enduml
