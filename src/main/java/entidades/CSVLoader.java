@@ -1,37 +1,41 @@
 package entidades;
 
+import javax.persistence.*;
 
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
 @Setter
-public class DatabaseService {
+public class CSVLoader {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(nullable = false)
-    private String estado;
+    private String archivo;
 
     @ManyToOne
     @JoinColumn(name = "programa_id", nullable = false)
     private Programa programa;
 
-    public DatabaseService() {
+    @OneToMany(mappedBy = "csvLoader", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Dataset> datasets;
+
+    public CSVLoader() {
     }
 
-    public DatabaseService(Integer id, String estado, Programa programa) {
+    public CSVLoader(Integer id, String archivo, Programa programa) {
         this.id = id;
-        this.estado = estado;
+        this.archivo = archivo;
         this.programa = programa;
     }
 
-    public void insertarDatosConcurrentes(Object datos) {
-        // Implement the method to insert concurrent data
+    public void cargarDatos() {
+
     }
 }

@@ -5,11 +5,12 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
 @Setter
-public class DatabaseService {
+public class ExecutorServiceManager {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,16 +23,19 @@ public class DatabaseService {
     @JoinColumn(name = "programa_id", nullable = false)
     private Programa programa;
 
-    public DatabaseService() {
+    @OneToMany(mappedBy = "executorServiceManager", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DataProcessor> dataProcessors;
+
+    public ExecutorServiceManager() {
     }
 
-    public DatabaseService(Integer id, String estado, Programa programa) {
+    public ExecutorServiceManager(Integer id, String estado, Programa programa) {
         this.id = id;
         this.estado = estado;
         this.programa = programa;
     }
 
-    public void insertarDatosConcurrentes(Object datos) {
-        // Implement the method to insert concurrent data
+    public void ejecutarConcurrencia() {
+        // Implement the method to execute concurrency
     }
 }

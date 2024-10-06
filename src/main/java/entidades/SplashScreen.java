@@ -1,6 +1,5 @@
 package entidades;
 
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,7 +8,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
-public class DatabaseService {
+public class SplashScreen {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,16 +21,30 @@ public class DatabaseService {
     @JoinColumn(name = "programa_id", nullable = false)
     private Programa programa;
 
-    public DatabaseService() {
+    public SplashScreen() {
     }
 
-    public DatabaseService(Integer id, String estado, Programa programa) {
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
         this.id = id;
-        this.estado = estado;
-        this.programa = programa;
     }
 
-    public void insertarDatosConcurrentes(Object datos) {
-        // Implement the method to insert concurrent data
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    public Programa getPrograma() {
+        return programa;
+    }
+
+    public void setPrograma(Programa programa) {
+        this.programa = programa;
     }
 }
